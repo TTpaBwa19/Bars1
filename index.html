@@ -1,125 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bars Kombat</title>
     <meta charset="UTF-8">
+    <title>Bars Kombat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            background: #2c3e50; 
+        body {
+            margin: 0;
+            background: #0f0f1a;
             color: white;
-            padding: 20px;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
         }
-        #bars {
-            width: 200px; 
-            cursor: pointer;
-            transition: transform 0.1s;
-            margin: 20px;
-            filter: brightness(0) invert(1);
+
+        .money {
+            font-size: 32px;
+            margin-top: 20px;
         }
-        #coins, #click-power, #timer { 
-            font-size: 24px; 
-            margin: 10px;
-        }
-        button {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
+
+        .level-bar {
+            width: 80%;
+            height: 10px;
+            background: #2e2e40;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+            margin: 10px auto;
+            overflow: hidden;
         }
-        .upgrade {
-            background: #e67e22;
+
+        .level-progress {
+            width: 30%;
+            height: 100%;
+            background: linear-gradient(90deg, #32c4ff, #9e6eff);
+        }
+
+        .rank {
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        .circle {
+            margin: 30px auto;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, #1c1c2e, #10101a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bars-img {
+            width: 150px;
+            transition: transform 0.1s ease;
+        }
+
+        .bars-img:active {
+            transform: scale(1.05);
+        }
+
+        .bottom {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaa;
         }
     </style>
 </head>
 <body>
-    <h1>Bars Kombat 🐆</h1>
-    
-    <div id="coins">💰 Монеты: 0</div>
-    <div id="click-power">💪 Сила клика: 1</div>
-    <div id="timer">⏱ Время: 60 сек</div>
-    
-   <img id="bars" src="https://i.ibb.co/k6V4BhbZ/image.png" alt="Барс">
-    
-    <button onclick="buyUpgrade()" class="upgrade">Улучшить (+1) - 10 монет</button>
-    <button onclick="startTask()">📝 Задания</button>
-    <button onclick="showLeaderboard()">🏆 Топ игроков</button>
+    <div class="money">💰 <span id="coins">0</span></div>
+    <div class="rank">Bronze | Level 1</div>
+
+    <div class="level-bar">
+        <div class="level-progress" id="progress"></div>
+    </div>
+
+    <div class="circle">
+        <img src="https://i.ibb.co/k6V4BhbZ/image.png" class="bars-img" id="bars">
+    </div>
+
+    <div class="bottom">⚡ 145 / 1000 | 🚀 Boost</div>
 
     <script>
-        // Игровые переменные
         let coins = 0;
-        let clickPower = 1;
-        let timeLeft = 60;
-        let timer;
+        const maxEnergy = 1000;
+        const currentEnergy = 145;
 
-        // Клик по барсу
-        document.getElementById('bars').addEventListener('click', () => {
-            coins += clickPower;
-            updateGame();
-            animateBars();
+        document.getElementById("bars").addEventListener("click", () => {
+            coins++;
+            document.getElementById("coins").textContent = coins;
+
+            // Можно отправить данные в бота
+            if (window.Telegram) {
+                Telegram.WebApp.sendData(JSON.stringify({
+                    action: "click",
+                    coins: coins
+                }));
+            }
         });
 
-        // Покупка улучшения
-        function buyUpgrade() {
-            if (coins >= 10) {
-                coins -= 10;
-                clickPower += 1;
-                updateGame();
-            } else {
-                alert("Недостаточно монет!");
-            }
-        }
-
-        // Задания (заглушка)
-        function startTask() {
-            const task = ["2+2=?", "5×3=?", "Столица России?"][Math.floor(Math.random() * 3)];
-            const answer = prompt(`Задание: ${task}\nВведите ответ:`);
-            if (answer === "4" || answer === "15" || answer === "Москва") {
-                coins += 20;
-                updateGame();
-                alert("✅ Верно! +20 монет");
-            } else {
-                alert("❌ Неправильно!");
-            }
-        }
-
-        // Топ игроков (заглушка)
-        function showLeaderboard() {
-            alert("🏆 Топ игроков:\n1. Вы - " + coins + " монет");
-        }
-
-        // Таймер
-        function startTimer() {
-            timer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').textContent = `⏱ Время: ${timeLeft} сек`;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    alert(`⏰ Время вышло! Ваш счёт: ${coins} монет`);
-                }
-            }, 1000);
-        }
-
-        // Анимация клика
-        function animateBars() {
-            const bars = document.getElementById('bars');
-            bars.style.transform = 'scale(0.95)';
-            setTimeout(() => bars.style.transform = 'scale(1)', 100);
-        }
-
-        // Обновление интерфейса
-        function updateGame() {
-            document.getElementById('coins').textContent = `💰 Монеты: ${coins}`;
-            document.getElementById('click-power').textContent = `💪 Сила клика: ${clickPower}`;
-        }
-
-        // Запуск игры
-        startTimer();
+        // Прогресс бар (например, энергия/уровень)
+        const progressEl = document.getElementById("progress");
+        progressEl.style.width = `${(currentEnergy / maxEnergy) * 100}%`;
     </script>
 </body>
 </html>
+
