@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -157,10 +156,10 @@
     <div class="overlay" id="overlay"></div>
 
     <div class="modal" id="taskListModal">
-    <h2>📚 Задания</h2>
-    <div id="taskList"></div>
-    <button onclick="closeTaskList()">Закрыть</button>
-</div>
+        <h2>📚 Задания</h2>
+        <div id="taskList"></div>
+        <button onclick="closeTaskList()">Закрыть</button>
+    </div>
 
     <!-- Меню -->
     <div class="bottom-menu">
@@ -201,51 +200,51 @@
         }
 
         // --- Задания ---
-       const tasks = [
-    { q: "Сколько будет 2 + 2?", a: "4", reward: 20 },
-    { q: "5 × 3 = ?", a: "15", reward: 25 },
-    { q: "Столица России?", a: "Москва", reward: 30 },
-];
+        const tasks = [
+            { q: "Сколько будет 2 + 2?", a: "4", reward: 20 },
+            { q: "5 × 3 = ?", a: "15", reward: 25 },
+            { q: "Столица России?", a: "Москва", reward: 30 },
+        ];
 
-function openTask() {
-    const container = document.getElementById("taskList");
-    container.innerHTML = "";
+        function openTask() {
+            const container = document.getElementById("taskList");
+            container.innerHTML = "";
 
-    tasks.forEach((task, index) => {
-        const div = document.createElement("div");
-        div.style.marginBottom = "10px";
+            tasks.forEach((task, index) => {
+                const div = document.createElement("div");
+                div.style.marginBottom = "10px";
 
-        div.innerHTML = `
-            <div><b>${task.q}</b> — 💰 ${task.reward}</div>
-            <input type="text" id="answer-${index}" placeholder="Ваш ответ">
-            <button onclick="checkTaskAnswer(${index})">Ответить</button>
-        `;
+                div.innerHTML = `
+                    <div><b>${task.q}</b> — 💰 ${task.reward}</div>
+                    <input type="text" id="answer-${index}" placeholder="Ваш ответ">
+                    <button onclick="checkTaskAnswer(${index})">Ответить</button>
+                `;
 
-        container.appendChild(div);
-    });
+                container.appendChild(div);
+            });
 
-    document.getElementById("taskListModal").style.display = "block";
-    document.getElementById("overlay").style.display = "block";
-}
+            document.getElementById("taskListModal").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
 
-function checkTaskAnswer(index) {
-    const input = document.getElementById(`answer-${index}`);
-    const answer = input.value.trim();
-    const task = tasks[index];
+        function checkTaskAnswer(index) {
+            const input = document.getElementById(`answer-${index}`);
+            const answer = input.value.trim();
+            const task = tasks[index];
 
-    if (answer.toLowerCase() === task.a.toLowerCase()) {
-        coins += task.reward;
-        document.getElementById("coins").textContent = coins;
-        alert(`✅ Верно! +${task.reward} монет`);
-    } else {
-        alert("❌ Неправильно!");
-    }
-}
+            if (answer.toLowerCase() === task.a.toLowerCase()) {
+                coins += task.reward;
+                document.getElementById("coins").textContent = coins;
+                alert(`✅ Верно! +${task.reward} монет`);
+            } else {
+                alert("❌ Неправильно!");
+            }
+        }
 
-function closeTaskList() {
-    document.getElementById("taskListModal").style.display = "none";
-    document.getElementById("overlay").style.display = "none";
-}
+        function closeTaskList() {
+            document.getElementById("taskListModal").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
 
         function closeModal() {
             document.getElementById("taskModal").style.display = "none";
@@ -258,63 +257,3 @@ function closeTaskList() {
     </script>
 </body>
 </html>
-
-
-=======
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Bars Kombat</title>
-    <meta charset="UTF-8">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            background: #f5f5f5;
-            padding: 20px;
-        }
-        #bars { 
-            width: 200px; 
-            cursor: pointer; 
-            transition: transform 0.1s;
-        }
-        #coins { 
-            font-size: 24px; 
-            font-weight: bold; 
-            color: #e6b800;
-        }
-        button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <h1>Bars Kombat 🐆</h1>
-    <p>Тыкай на барса и получай монеты!</p>
-    <img id="bars" src="https://i.imgur.com/ваша-картинка.png" alt="Барс">
-    <p id="coins">💰 Монеты: 0</p>
-    <button onclick="alert('Задание: 2+2=? Ответь боту!')">📝 Задания</button>
-    <button onclick="alert('Топ игроков: 1. Ты – 0 монет')">🏆 Рейтинг</button>
-
-    <script>
-        let coins = 0;
-        const barsImg = document.getElementById('bars');
-        const coinsDisplay = document.getElementById('coins');
-
-        barsImg.addEventListener('click', () => {
-            coins += 1;
-            coinsDisplay.textContent = `💰 Монеты: ${coins}`;
-            barsImg.style.transform = 'scale(0.95)';
-            setTimeout(() => { barsImg.style.transform = 'scale(1)'; }, 100);
-        });
-    </script>
-</body>
-</html>
->>>>>>> ccdafb8 (Первый коммит: добавлены bot.py и requirements.txt)
