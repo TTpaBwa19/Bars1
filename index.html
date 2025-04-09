@@ -52,8 +52,8 @@
         }
 
         .bars-img {
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
             object-fit: cover;
             border-radius: 50%;
             transition: transform 0.1s ease;
@@ -155,12 +155,11 @@
     <!-- Модалка -->
     <div class="overlay" id="overlay"></div>
 
-    <div class="modal" id="taskModal">
-        <h2>📚 Задание</h2>
-        <p id="taskText">Сколько будет 2 + 2?</p>
-        <input type="text" id="taskAnswer" placeholder="Ответ">
-        <button onclick="checkAnswer()">Ответить</button>
-    </div>
+    <div class="modal" id="taskListModal">
+    <h2>📚 Задания</h2>
+    <div id="taskList"></div>
+    <button onclick="closeTaskList()">Закрыть</button>
+</div>
 
     <!-- Меню -->
     <div class="bottom-menu">
@@ -201,34 +200,51 @@
         }
 
         // --- Задания ---
-        const tasks = [
-            { q: "Сколько будет 5 × 3?", a: "15" },
-            { q: "Столица России?", a: "Москва" },
-            { q: "2 + 2 = ?", a: "4" },
-        ];
+       const tasks = [
+    { q: "Сколько будет 2 + 2?", a: "4", reward: 20 },
+    { q: "5 × 3 = ?", a: "15", reward: 25 },
+    { q: "Столица России?", a: "Москва", reward: 30 },
+];
 
-        function openTask() {
-            const task = tasks[Math.floor(Math.random() * tasks.length)];
-            document.getElementById("taskText").textContent = task.q;
-            document.getElementById("taskAnswer").value = "";
-            document.getElementById("taskModal").dataset.answer = task.a;
-            document.getElementById("taskModal").style.display = "block";
-            document.getElementById("overlay").style.display = "block";
-        }
+function openTask() {
+    const container = document.getElementById("taskList");
+    container.innerHTML = "";
 
-        function checkAnswer() {
-            const userAnswer = document.getElementById("taskAnswer").value.trim();
-            const correct = document.getElementById("taskModal").dataset.answer;
+    tasks.forEach((task, index) => {
+        const div = document.createElement("div");
+        div.style.marginBottom = "10px";
 
-            if (userAnswer.toLowerCase() === correct.toLowerCase()) {
-                coins += 20;
-                document.getElementById("coins").textContent = coins;
-                alert("✅ Верно! +20 монет");
-            } else {
-                alert("❌ Неправильно!");
-            }
-            closeModal();
-        }
+        div.innerHTML = `
+            <div><b>${task.q}</b> — 💰 ${task.reward}</div>
+            <input type="text" id="answer-${index}" placeholder="Ваш ответ">
+            <button onclick="checkTaskAnswer(${index})">Ответить</button>
+        `;
+
+        container.appendChild(div);
+    });
+
+    document.getElementById("taskListModal").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+}
+
+function checkTaskAnswer(index) {
+    const input = document.getElementById(`answer-${index}`);
+    const answer = input.value.trim();
+    const task = tasks[index];
+
+    if (answer.toLowerCase() === task.a.toLowerCase()) {
+        coins += task.reward;
+        document.getElementById("coins").textContent = coins;
+        alert(`✅ Верно! +${task.reward} монет`);
+    } else {
+        alert("❌ Неправильно!");
+    }
+}
+
+function closeTaskList() {
+    document.getElementById("taskListModal").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
 
         function closeModal() {
             document.getElementById("taskModal").style.display = "none";
